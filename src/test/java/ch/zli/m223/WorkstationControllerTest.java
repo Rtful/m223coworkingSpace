@@ -1,18 +1,11 @@
 package ch.zli.m223;
 
-import ch.zli.m223.model.Booking;
-import ch.zli.m223.model.User;
 import ch.zli.m223.model.Workstation;
 import ch.zli.m223.service.UserService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
-import org.apache.http.client.utils.DateUtils;
 import org.gradle.internal.impldep.javax.inject.Inject;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -86,6 +79,22 @@ public class WorkstationControllerTest {
       .then()
       .statusCode(200)
       .body("checkIn", is("2023-05-01T01:01:01"));
+  }
+
+  @Test
+  public void testAvailability() {
+    given()
+      .when().get("/availability/2022-11-23")
+      .then()
+      .statusCode(200)
+      .body(is("true"));
+  }
+  @Test
+  public void testAvailableWorkstations() {
+    given()
+      .when().get("/availability/2022-11-23")
+      .then()
+      .statusCode(200);
   }
 
 }
