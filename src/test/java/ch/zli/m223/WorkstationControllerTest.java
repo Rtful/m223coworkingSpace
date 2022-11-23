@@ -34,7 +34,7 @@ public class WorkstationControllerTest {
   }
 
   @Test
-  public void testCreateEndPoint() {
+  public void testCreateWorkstation() {
     Workstation workstation = new Workstation();
     workstation.setFloor(5);
     given()
@@ -45,7 +45,7 @@ public class WorkstationControllerTest {
   }
 
   @Test
-  public void testDeleteEndpoint() {
+  public void testDeleteWorkstation() {
     Workstation workstation = new Workstation();
     workstation.setFloor(5);
     var createResponse = given()
@@ -60,7 +60,15 @@ public class WorkstationControllerTest {
   }
 
   @Test
-  public void testUpdateEndpoint() {
+  public void testDeleteNonExistentWorkstation() {
+    given()
+      .when().delete("/user/9483875797")
+      .then()
+      .statusCode(500);
+  }
+
+  @Test
+  public void testUpdateWorkstation() {
     Workstation workstation = new Workstation();
     workstation.setFloor(5);
     var createResponse = given()
