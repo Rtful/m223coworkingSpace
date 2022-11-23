@@ -22,6 +22,7 @@ Die Daten werden in einer PostgreSQL-Datenbank gespeichert. In der Entwicklungsu
  - Password: `postgres`
 
 ### Login-Daten:
+ - URL: http://127.0.0.1:8080/session
  - Admin: aholenstein.icloud.com / testpw
  - Member: test@example.com / password
 
