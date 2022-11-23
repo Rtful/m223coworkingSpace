@@ -22,7 +22,7 @@ public class BookingControllerTest {
   UserService userService;
 
   @Test
-  public void testIndexEndpoint() {
+  public void testIndexBooking() {
     given()
       .when().get("/booking")
       .then()
@@ -30,48 +30,35 @@ public class BookingControllerTest {
       .body(is("[]"));
   }
 
-//  @Test
-//  public void testDeleteEndpoint() {
-//    var booking = new Booking();
-//    booking.setStart(LocalDateTime.of(2022, 11, 23, 12, 0, 0));
-//    booking.setEnd(LocalDateTime.of(2022, 11, 23, 18, 0, 0));
-//    booking.setWorkstation();
-//    booking.setUser(user);
-//
-//    var createResponse = given()
-//      .contentType(ContentType.JSON)
-//      .body(booking)
-//      .when().post("/entries");
-//
-//    given()
-//      .when().delete("/entries/" + createResponse.jsonPath().get("id"))
-//      .then()
-//      .statusCode(204);
-//  }
-//
-//  @Test
-//  public void testUpdateEndpoint() {
-//    var entry = new Entry();
-//    entry.setCheckIn(LocalDateTime.now());
-//    entry.setCheckOut(LocalDateTime.now());
-//
-//    var createResponse = given()
-//      .contentType(ContentType.JSON)
-//      .body(entry)
-//      .when().post("/entries");
-//
-//
-//    var updatedEntry = new Entry();
-//    updatedEntry.setCheckIn(LocalDateTime.of(2023, 05, 1, 1, 1, 1));
-//    updatedEntry.setCheckOut(LocalDateTime.of(2023, 05, 1, 1, 1, 2));
-//
-//    given()
-//      .contentType(ContentType.JSON)
-//      .body(updatedEntry)
-//      .when().put("/entries/" + createResponse.jsonPath().get("id"))
-//      .then()
-//      .statusCode(200)
-//      .body("checkIn", is("2023-05-01T01:01:01"));
-//  }
+  @Test
+  public void testCreateBooking() {
+    given()
+      .contentType(ContentType.JSON)
+      .body("{\"start\":\"2022-07-12T12:00:00.000\",\"end\":\"2022-07-12T18:00:00.000\",\"user\":{\"id\":1},\"workstation\":{\"id\":1}}")
+      .when().post("/user")
+      .then().statusCode(200);
+  }
+
+  @Test
+  public void testCreateInvalidBooking() {
+    given()
+      .contentType(ContentType.JSON)
+      .body("{\"start\":\"2022-07-12T12:00:00.sdfe000\",\"end\":\"2022-07-12T18:00:00.000\",\"user\":{\"id\":1},\"workstation\":{\"id\":1}}")
+      .when().post("/user")
+      .then().statusCode(500);
+  }
+
+  @Test
+  public void testDeleteBooking() {
+    var createResponse = given()
+      .contentType(ContentType.JSON)
+      .body("{\"start\":\"2022-07-12T12:00:00.000\",\"end\":\"2022-07-12T18:00:00.000\",\"user\":{\"id\":1},\"workstation\":{\"id\":1}}")
+      .when().post("/entries");
+
+    given()
+      .when().delete("/entries/" + createResponse.jsonPath().get("id"))
+      .then()
+      .statusCode(204);
+  }
 
 }

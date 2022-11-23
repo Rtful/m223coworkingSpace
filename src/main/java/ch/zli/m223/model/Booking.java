@@ -31,7 +31,7 @@ public class Booking {
   @Fetch(FetchMode.JOIN)
   private Workstation workstation;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = false)
   @JsonIgnore
   @Fetch(FetchMode.JOIN)
   private User user;
