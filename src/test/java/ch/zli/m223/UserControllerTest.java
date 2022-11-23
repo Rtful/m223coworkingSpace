@@ -33,7 +33,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void testCreateEndPoint() {
+  public void testCreateUser() {
     given()
       .contentType(ContentType.JSON)
       .body("{\"firstname\":\"firstname\",\"lastname\":\"lastname\",\"birthdate\":\"2004-07-12T00:00:00.000+00:00\",\"email\":\"test@test.test\",\"gender\":\"m\",\"password\":\"1234\",\"role\":{\"id\":1}}")
@@ -42,7 +42,16 @@ public class UserControllerTest {
   }
 
   @Test
-  public void testDeleteEndpoint() {
+  public void testCreateInvalidUser() {
+    given()
+      .contentType(ContentType.JSON)
+      .body("{\"sdf\":\"firstname\",\"lastname\":\"lastname\",\"birthdate\":\"2004-07-12T00:00:00.000+00:00\",\"email\":\"test@test.test\",\"gender\":\"m\",\"password\":\"1234\",\"role\":{\"id\":1}}")
+      .when().post("/user")
+      .then().statusCode(500);
+  }
+
+  @Test
+  public void testDeleteUser() {
     var createResponse = given()
       .contentType(ContentType.JSON)
       .body("{\"firstname\":\"firstname\",\"lastname\":\"lastname\",\"birthdate\":\"2004-07-12T00:00:00.000+00:00\",\"email\":\"test@test.test\",\"gender\":\"m\",\"password\":\"1234\",\"role\":{\"id\":1}}")
@@ -55,8 +64,15 @@ public class UserControllerTest {
   }
 
   @Test
-  public void testUpdateEndpoint() {
+  public void testDeleteNonExistentUser() {
+    given()
+      .when().delete("/user/98437259469874")
+      .then()
+      .statusCode(500);
+  }
 
+  @Test
+  public void testUpdateUser() {
     var createResponse = given()
       .contentType(ContentType.JSON)
       .body("{\"firstname\":\"firstname\",\"lastname\":\"lastname\",\"birthdate\":\"2004-07-12T00:00:00.000+00:00\",\"email\":\"test@test.test\",\"gender\":\"m\",\"password\":\"1234\",\"role\":{\"id\":1}}")
@@ -68,6 +84,22 @@ public class UserControllerTest {
       .when().put("/entries/" + createResponse.jsonPath().get("id"))
       .then()
       .statusCode(200)
+      .body("checkIn", is("2023-05-01T01:01:01"));
+  }
+
+  @Test
+  public void testUpdateInvalidUser() {
+    var createResponse = given()
+      .contentType(ContentType.JSON)
+      .body("{\"firstname\":\"firstname\",\"lastname\":\"lastname\",\"birthdate\":\"2004-07-12T00:00:00.000+00:00\",\"email\":\"test@test.test\",\"gender\":\"m\",\"password\":\"1234\",\"role\":{\"id\":1}}")
+      .when().post("/user");
+
+    given()
+      .contentType(ContentType.JSON)
+      .body("{\"firstname\":\"firstName\",\"lastname\":\"lastName\",\"birthdate\":\"2000-07-12T0000:00:00.000+00:00\",\"email\":\"test1@test.test\",\"gender\":\"uzegwf\",\"password\":\"dsafra\",\"role\":{\"id\":2}}")
+      .when().put("/entries/" + createResponse.jsonPath().get("id"))
+      .then()
+      .statusCode(500)
       .body("checkIn", is("2023-05-01T01:01:01"));
   }
 
